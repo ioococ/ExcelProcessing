@@ -1,20 +1,23 @@
-package com.example.filedemo.service;
+package ink.onei.excel.service;
 
-import com.example.filedemo.exception.FileStorageException;
-import com.example.filedemo.exception.MyFileNotFoundException;
-import com.example.filedemo.property.FileStorageProperties;
+import ink.onei.excel.domain.payload.FileStorageProperties;
+import ink.onei.excel.exception.FileStorageException;
+import ink.onei.excel.exception.MyFileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 @Service
 public class FileStorageService {
@@ -35,17 +38,18 @@ public class FileStorageService {
 
     public String storeFile(MultipartFile file) {
         // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
-        try {
+        try (InputStream inputStream = file.getInputStream()) {
             // Check if the file's name contains invalid characters
-            if(fileName.contains("..")) {
+            if (fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            Files.copy(inputStream, targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return fileName;
         } catch (IOException ex) {
@@ -57,7 +61,7 @@ public class FileStorageService {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
-            if(resource.exists()) {
+            if (resource.exists()) {
                 return resource;
             } else {
                 throw new MyFileNotFoundException("File not found " + fileName);
