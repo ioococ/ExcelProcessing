@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @Author: nekotako
- * @Description: TODO
+ * @Description: RabbitMQ Main Class
  * @Date: 16/03/2024 10:52 Saturday
  */
 @Service

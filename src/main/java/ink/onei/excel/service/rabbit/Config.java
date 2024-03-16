@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: nekotako
- * @Description: TODO
+ * @Description: RabbitMQ Configuration Class
  * @Date: 16/03/2024 10:59 Saturday
  */
 
