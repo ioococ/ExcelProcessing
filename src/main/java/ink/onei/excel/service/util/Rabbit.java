@@ -19,7 +19,7 @@ public class Rabbit {
     private AmqpTemplate rabbitTemplate;
 
     public void send(Object o) {
-        rabbitTemplate.convertAndSend(o);
+//        rabbitTemplate.convertAndSend(o);
     }
 
     //接受者

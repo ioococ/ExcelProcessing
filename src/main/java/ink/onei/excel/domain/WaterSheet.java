@@ -25,6 +25,9 @@ public class WaterSheet extends BaseWater {
     @ExcelIgnore
     private Integer type;
 
+    @ExcelProperty("日期")
+    private Date date;
+
     // pH
     @ExcelProperty(value = "pH")
     private BigDecimal pH;

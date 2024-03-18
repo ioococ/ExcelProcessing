@@ -7,12 +7,11 @@ import ink.onei.excel.service.FileStorageService;
 import ink.onei.excel.service.excel.WaterSheetListener;
 import ink.onei.excel.service.util.Rabbit;
 import ink.onei.excel.service.util.RedisCache;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.core.io.Resource;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,13 +39,13 @@ public class FileController {
     @PostMapping("/import")
     public UploadFileResponse importFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
 
-        if (multipartFile.isEmpty() || !multipartFile.getContentType().contains("sheet")) return new UploadFileResponse();
+        if (multipartFile.isEmpty() || !multipartFile.getContentType().contains("sheet"))
+            return new UploadFileResponse();
 
-        String[] dateS = multipartFile.getOriginalFilename().split("-");
+        String[] dateS = FilenameUtils.getBaseName(multipartFile.getOriginalFilename()).split("-");
 
-        redisCache.setCacheObject("excel.department.", dateS);
-
-        EasyExcel.read(multipartFile.getInputStream(), WaterSheet.class, new WaterSheetListener(rabbit))
+        EasyExcel.read(multipartFile.getInputStream(), WaterSheet.class,
+                        new WaterSheetListener(rabbit, dateS))
                 .headRowNumber(3).sheet().doRead();
 
 //        String fileName = fileStorageService.storeFile(multipartFile);
