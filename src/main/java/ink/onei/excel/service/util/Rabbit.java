@@ -1,4 +1,4 @@
-package ink.onei.excel.service.rabbit;
+package ink.onei.excel.service.util;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;

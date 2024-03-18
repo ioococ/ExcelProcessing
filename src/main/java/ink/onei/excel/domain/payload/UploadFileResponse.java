@@ -12,4 +12,9 @@ public class UploadFileResponse {
     private String fileDownloadUri;
     private String fileType;
     private long size;
+
+    public UploadFileResponse(String fileType, long size) {
+        this.size = size;
+        this.fileType = fileType;
+    }
 }

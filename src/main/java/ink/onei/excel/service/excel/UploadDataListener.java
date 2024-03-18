@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author Jiaju Zhuang
  */
-// 有个很重要的点 DemoDataListener 不能被spring管理，要每次读取excel都要new,然后里面用到spring可以构造方法传进去
+// 有个很重要的点 WaterSheetListener 不能被spring管理，要每次读取excel都要new,然后里面用到spring可以构造方法传进去
 @Slf4j
 public class UploadDataListener implements ReadListener<UploadData> {
     /**
@@ -30,8 +30,6 @@ public class UploadDataListener implements ReadListener<UploadData> {
     private UploadMapper uploadMapper;
 
     public UploadDataListener() {
-        // 这里是demo，所以随便new一个。实际使用如果到了spring,请使用下面的有参构造函数
-        uploadMapper = new UploadMapper();
     }
 
     /**
@@ -78,7 +76,7 @@ public class UploadDataListener implements ReadListener<UploadData> {
      */
     private void saveData() {
         log.info("{}条数据，开始存储数据库！", cachedDataList.size());
-        uploadMapper.save(cachedDataList);
+        uploadMapper.waterSave(cachedDataList);
         log.info("存储数据库成功！");
     }
 }

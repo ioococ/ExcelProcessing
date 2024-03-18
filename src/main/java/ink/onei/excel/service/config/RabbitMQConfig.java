@@ -1,4 +1,4 @@
-package ink.onei.excel.service.rabbit;
+package ink.onei.excel.service.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @Configuration
-public class Config {
+public class RabbitMQConfig {
 
     public final static String TOPIC_ONE = "topic.one";
     public final static String TOPIC_TWO = "topic.two";

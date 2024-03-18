@@ -1,23 +1,26 @@
 package ink.onei.excel.controller;
 
+import com.alibaba.excel.EasyExcel;
+import ink.onei.excel.domain.WaterSheet;
 import ink.onei.excel.domain.payload.UploadFileResponse;
 import ink.onei.excel.service.FileStorageService;
+import ink.onei.excel.service.excel.WaterSheetListener;
+import ink.onei.excel.service.util.Rabbit;
+import ink.onei.excel.service.util.RedisCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.core.io.Resource;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class FileController {
@@ -27,22 +30,29 @@ public class FileController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private Rabbit rabbit;
+
+    @Autowired
+    private RedisCache redisCache;
+
+
     @PostMapping("/import")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+    public UploadFileResponse importFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
+        if (multipartFile.isEmpty() || !multipartFile.getContentType().contains("sheet")) return new UploadFileResponse();
 
-        return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
-    }
+        String[] dateS = multipartFile.getOriginalFilename().split("-");
 
-    @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.stream(files)
-                .map(this::uploadFile)
-                .collect(Collectors.toList());
+        redisCache.setCacheObject("excel.department.", dateS);
+
+        EasyExcel.read(multipartFile.getInputStream(), WaterSheet.class, new WaterSheetListener(rabbit))
+                .headRowNumber(3).sheet().doRead();
+
+//        String fileName = fileStorageService.storeFile(multipartFile);
+
+        return new UploadFileResponse(multipartFile.getContentType(), multipartFile.getSize());
+//        return new UploadFileResponse(fileName, fileDownloadUri, multipartFile.getContentType(), multipartFile.getSize());
     }
 
     @GetMapping("/downloadFile/{fileName:.+}")
