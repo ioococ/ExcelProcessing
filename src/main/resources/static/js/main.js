@@ -15,7 +15,7 @@ function uploadSingleFile(file) {
     formData.append("file", file);
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/uploadFile");
+    xhr.open("POST", "/import");
 
     xhr.onload = function() {
         console.log(xhr.responseText);
