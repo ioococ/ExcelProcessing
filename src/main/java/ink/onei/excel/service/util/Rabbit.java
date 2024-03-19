@@ -18,8 +18,8 @@ public class Rabbit {
     @Autowired
     private AmqpTemplate rabbitTemplate;
 
-    public void send(Object o) {
-//        rabbitTemplate.convertAndSend(o);
+    public void send(String msg) {
+        rabbitTemplate.convertAndSend(msg);
     }
 
     //接受者

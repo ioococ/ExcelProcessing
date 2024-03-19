@@ -39,13 +39,12 @@ public class FileController {
     @PostMapping("/import")
     public UploadFileResponse importFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
 
-        if (multipartFile.isEmpty() || !multipartFile.getContentType().contains("sheet"))
-            return new UploadFileResponse();
+//        if (multipartFile.isEmpty() || !multipartFile.getContentType().contains("sheet")) return new UploadFileResponse();
 
         String[] dateS = FilenameUtils.getBaseName(multipartFile.getOriginalFilename()).split("-");
 
         EasyExcel.read(multipartFile.getInputStream(), WaterSheet.class,
-                        new WaterSheetListener(rabbit, dateS))
+                        new WaterSheetListener(null, rabbit, dateS))
                 .headRowNumber(3).sheet().doRead();
 
 //        String fileName = fileStorageService.storeFile(multipartFile);
