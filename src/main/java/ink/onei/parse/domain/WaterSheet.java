@@ -1,12 +1,23 @@
 package ink.onei.parse.domain;
 
-import com.alibaba.excel.annotation.ExcelIgnore;
-import com.alibaba.excel.annotation.ExcelProperty;
+
 import com.google.gson.Gson;
-import lombok.*;
+import com.poiji.annotation.ExcelCell;
+import com.poiji.annotation.ExcelCellName;
+import com.poiji.annotation.ExcelCellsJoinedByName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import java.math.BigDecimal;
+import java.sql.Time;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Timer;
 
 /**
  * @Author: nekotako
@@ -15,93 +26,97 @@ import java.util.Date;
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class WaterSheet extends BaseWater {
+@NoArgsConstructor
+@AllArgsConstructor
+public class WaterSheet {
 
-    @ExcelIgnore
+//    @ExcelIgnore
     private Long id;
 
     // 类型
-    @ExcelIgnore
+//    @ExcelIgnore
     private Integer type;
 
-    @ExcelProperty("日期")
+    @ExcelCell(0)
     private Date date;
 
+    @ExcelCell(1)
+    private String time;
+
     // pH
-    @ExcelProperty(value = "pH")
-    private BigDecimal pH;
+    @ExcelCellsJoinedByName(expression = "pH")
+    private MultiValuedMap<String, BigDecimal> pH = new ArrayListValuedHashMap<>();
 
     // SS
-    @ExcelProperty(value = "SS")
-    private BigDecimal SS;
+    @ExcelCellsJoinedByName(expression = "SS")
+    private MultiValuedMap<String, BigDecimal> SS = new ArrayListValuedHashMap<>();
 
     // 氨氮
-    @ExcelProperty(value = "氨氮")
-    private BigDecimal NH3N;
+    @ExcelCellsJoinedByName(expression = "氨氮")
+    private MultiValuedMap<String, BigDecimal> NH3N = new ArrayListValuedHashMap<>();
 
     // 总氮
-    @ExcelProperty(value = "总氮")
-    private BigDecimal TN;
+    @ExcelCellsJoinedByName(expression = "总氮")
+    private MultiValuedMap<String, BigDecimal> TN = new ArrayListValuedHashMap<>();
 
     // COD
-    @ExcelProperty(value = "COD")
-    private BigDecimal COD;
+    @ExcelCellsJoinedByName(expression = "COD")
+    private MultiValuedMap<String, BigDecimal> COD = new ArrayListValuedHashMap<>();
 
     // BOD
-    @ExcelProperty(value = "BOD")
-    private BigDecimal BOD;
+    @ExcelCellsJoinedByName(expression = "BOD")
+    private MultiValuedMap<String, BigDecimal> BOD = new ArrayListValuedHashMap<>();
 
     // 硫氰酸根
-    @ExcelProperty(value = "硫氰酸根")
-    private BigDecimal SCN;
+    @ExcelCellsJoinedByName(expression = "硫氰酸根")
+    private MultiValuedMap<String, BigDecimal> SCN = new ArrayListValuedHashMap<>();
 
     // 硫化物
-    @ExcelProperty(value = "硫化物")
-    private BigDecimal Sx;
+    @ExcelCellsJoinedByName(expression = "硫化物")
+    private MultiValuedMap<String, BigDecimal> Sx = new ArrayListValuedHashMap<>();
 
     // 挥发酚
-    @ExcelProperty(value = "挥发酚")
-    private BigDecimal C6H6O;
+    @ExcelCellsJoinedByName(expression = "挥发酚")
+    private MultiValuedMap<String, BigDecimal> C6H6O = new ArrayListValuedHashMap<>();
 
     // 碱度
-    @ExcelProperty(value = "碱度")
-    private BigDecimal ALK;
+    @ExcelCellsJoinedByName(expression = "碱度")
+    private MultiValuedMap<String, BigDecimal> ALK = new ArrayListValuedHashMap<>();
 
     // 氯离子
-    @ExcelProperty(value = "氯离子")
-    private BigDecimal Cl;
+    @ExcelCellsJoinedByName(expression = "氯离子")
+    private MultiValuedMap<String, BigDecimal> Cl = new ArrayListValuedHashMap<>();
 
     // 石油类
-    @ExcelProperty(value = "石油类")
-    private BigDecimal CxHy;
+    @ExcelCellsJoinedByName(expression = "石油类")
+    private MultiValuedMap<String, BigDecimal> CxHy = new ArrayListValuedHashMap<>();
 
     // 苯
-    @ExcelProperty(value = "苯")
-    private BigDecimal C6H6;
+    @ExcelCellsJoinedByName(expression = "苯")
+    private MultiValuedMap<String, BigDecimal> C6H6 = new ArrayListValuedHashMap<>();
 
     // 多环芳烃
-    @ExcelProperty(value = "多环芳烃")
-    private BigDecimal PAH;
+    @ExcelCellsJoinedByName(expression = "多环芳烃")
+    private MultiValuedMap<String, BigDecimal> PAH = new ArrayListValuedHashMap<>();
 
     // 苯并芘
-    @ExcelProperty(value = "苯并芘")
-    private BigDecimal BaP;
+    @ExcelCellsJoinedByName(expression = "苯并芘")
+    private MultiValuedMap<String, BigDecimal> BaP = new ArrayListValuedHashMap<>();
 
     // 总氰
-    @ExcelProperty(value = "总氰")
-    private BigDecimal TC;
+    @ExcelCellsJoinedByName(expression = "总氰")
+    private MultiValuedMap<String, BigDecimal> TC = new ArrayListValuedHashMap<>();
 
-    @ExcelIgnore
+//    @ExcelIgnore
     private String remark;
 
-    @ExcelIgnore
+//    @ExcelIgnore
     private Long createUser;
 
-    @ExcelIgnore
+//    @ExcelIgnore
     private Date createTime;
 
-    @ExcelIgnore
+//    @ExcelIgnore
     private Integer delFlag;
 
     public String hasEmpty() {
