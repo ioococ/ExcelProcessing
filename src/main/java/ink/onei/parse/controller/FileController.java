@@ -6,7 +6,6 @@ import ink.onei.parse.domain.payload.UploadFileResponse;
 import ink.onei.parse.service.FileStorageService;
 import ink.onei.parse.service.excel.WaterSheetListener;
 import ink.onei.parse.service.util.Rabbit;
-import ink.onei.parse.service.util.RedisCache;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +30,6 @@ public class FileController {
 
     @Autowired
     private Rabbit rabbit;
-
-    @Autowired
-    private RedisCache redisCache;
-
 
     @PostMapping("/import")
     public UploadFileResponse importFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {

@@ -6,8 +6,8 @@ import com.alibaba.excel.util.ListUtils;
 import com.google.gson.Gson;
 import ink.onei.parse.domain.RabbitMSG;
 import ink.onei.parse.domain.WaterSheet;
+import ink.onei.parse.service.util.ExcelUtils;
 import ink.onei.parse.service.util.Rabbit;
-import ink.onei.parse.service.util.RedisCache;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.GregorianCalendar;
@@ -39,8 +39,6 @@ public class WaterSheetListener implements ReadListener<WaterSheet> {
     private final Gson gson = new Gson();
 
     private Rabbit rabbit;
-
-    private RedisCache redisCache;
 
     private String[] dateS;
 
@@ -79,7 +77,7 @@ public class WaterSheetListener implements ReadListener<WaterSheet> {
      */
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
-        RabbitMSG msg = ExcelUtil.dateVerify(getDate(dateS), dataList);
+        RabbitMSG msg = ExcelUtils.dateVerify(getDate(dateS), dataList);
         rabbit.send(gson.toJson(msg));
         // 这里也要保存数据，确保最后遗留的数据也存储到数据库
         saveData();

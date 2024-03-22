@@ -3,21 +3,15 @@ package ink.onei.parse.domain;
 
 import com.google.gson.Gson;
 import com.poiji.annotation.ExcelCell;
-import com.poiji.annotation.ExcelCellName;
 import com.poiji.annotation.ExcelCellsJoinedByName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Timer;
 
 /**
  * @Author: nekotako
@@ -38,7 +32,7 @@ public class WaterSheet {
     private Integer type;
 
     @ExcelCell(0)
-    private Date date;
+    private String date;
 
     @ExcelCell(1)
     private String time;
@@ -119,7 +113,7 @@ public class WaterSheet {
 //    @ExcelIgnore
     private Integer delFlag;
 
-    public String hasEmpty() {
-        return new Gson().toJson(this).contains("null") ? "0":"1";
+    public Boolean hasEmpty() {
+        return null;
     }
 }
