@@ -1,10 +1,8 @@
-package ink.onei.parse.domain;
+package ink.onei.parse.domain.dto;
 
 
-import com.google.gson.Gson;
 import com.poiji.annotation.ExcelCell;
 import com.poiji.annotation.ExcelCellsJoinedByName;
-import com.poiji.annotation.ExcelRow;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +25,6 @@ public class WaterSheet {
 
     private Long id;
 
-    @ExcelRow()
     private String location;
 
     // 类型
@@ -103,16 +100,16 @@ public class WaterSheet {
     @ExcelCellsJoinedByName(expression = "总氰")
     private MultiValuedMap<String, BigDecimal> TC = new ArrayListValuedHashMap<>();
 
-//    @ExcelIgnore
+    //    @ExcelIgnore
     private String remark;
 
-//    @ExcelIgnore
+    //    @ExcelIgnore
     private Long createUser;
 
-//    @ExcelIgnore
+    //    @ExcelIgnore
     private Date createTime;
 
-//    @ExcelIgnore
+    //    @ExcelIgnore
     private Integer delFlag;
 
     public Boolean hasEmpty() {
